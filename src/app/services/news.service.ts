@@ -22,7 +22,10 @@ export class NewsService {
   }
 
   getTopHeadLines() {
-    return this.executeGet<ResponseTopHeadLines>("/top-headlines?sources=techcrunch");
-    //return this.http.get<ResponseTopHeadLines>(`${apiUrl}/top-headlines?sources=techcrunch`,{headers:header});
+    return this.executeGet<ResponseTopHeadLines>("/top-headlines?country=us");
+  }
+
+  getTopHeadLinesCategories(category:string){
+    return this.executeGet<ResponseTopHeadLines>(`/top-headlines?country=us&category=${category}`);
   }
 }
