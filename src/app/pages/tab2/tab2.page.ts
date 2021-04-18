@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonSegment } from '@ionic/angular';
 import { Article } from 'src/app/Interfaces/interfaces';
 import { NewsService } from 'src/app/services/news.service';
 
@@ -9,11 +10,13 @@ import { NewsService } from 'src/app/services/news.service';
 })
 export class Tab2Page implements OnInit {
   news: Article[] = [];
-  categories = ['business', 'entertainment', 'general', 'healt', 'science', 'sports', 'technology']
+  categories = ['business', 'entertainment', 'general', 'healt', 'science', 'sports', 'technology'];
+  @ViewChild(IonSegment, { static: true }) segment: IonSegment;
 
   constructor(private newsService: NewsService) { }
 
   ngOnInit() {
+    this.segment.value = this.categories[0];
     this.loadNews(this.categories[0])
   }
 
@@ -22,9 +25,22 @@ export class Tab2Page implements OnInit {
     this.loadNews(event.detail.value);
   }
 
-  private loadNews(category: string) {
+  loadData(event) {
+    this.loadNews(this.segment.value, event)
+  }
+
+  private loadNews(category: string, event?) {
+    this.segment.value = category;
     this.newsService.getTopHeadLinesCategories(category).subscribe(responseNews => {
-      this.news.push(...responseNews.articles)
+      if (responseNews.articles.length === 0) {
+        event.target.disable = true;
+        event.target.complete();
+        return;
+      }
+      this.news.push(...responseNews.articles);
+      if (event) {
+        event.target.complete();
+      }
     })
   }
 }
