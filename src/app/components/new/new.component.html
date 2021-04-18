@@ -8,9 +8,9 @@
                 </ion-button>
             </div>
         </ion-card-subtitle>
-        <ion-card-title>{{new.title}}</ion-card-title>
+        <ion-card-title (click)="openNew()">{{new.title}}</ion-card-title>
     </ion-card-header>
-    <ion-img *ngIf="new.urlToImage" [src]="new.urlToImage"></ion-img>
+    <ion-img (click)="openNew()" *ngIf="new.urlToImage" [src]="new.urlToImage"></ion-img>
     <ion-card-content>
         {{new.description}}
     </ion-card-content>

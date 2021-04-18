@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ActionSheetController } from '@ionic/angular';
 import { Article } from 'src/app/Interfaces/interfaces';
 
@@ -11,14 +12,24 @@ export class NewComponent implements OnInit {
   @Input() new: Article;
   @Input() i: number;
 
-  constructor(public actionSheetController: ActionSheetController) { }
+  constructor(public actionSheetController: ActionSheetController, private iab: InAppBrowser) { }
   ngOnInit() { }
+
+  openNew() {
+    const browser = this.iab.create(this.new.url, '_system');
+  }
 
   async showMenu() {
     const actionSheet = await this.actionSheetController.create({
       header: 'Options',
       cssClass: 'my-custom-class',
       buttons: [{
+        text: 'Read more',
+        icon: 'book',
+        handler: () => {
+          this.openNew();
+        }
+      }, {
         text: 'Share',
         icon: 'share',
         handler: () => {
