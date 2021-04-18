@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActionSheetController } from '@ionic/angular';
 import { Article } from 'src/app/Interfaces/interfaces';
 
 @Component({
@@ -10,7 +11,43 @@ export class NewComponent implements OnInit {
   @Input() new: Article;
   @Input() i: number;
 
-  constructor() { }
+  constructor(public actionSheetController: ActionSheetController) { }
   ngOnInit() { }
+
+  async showMenu() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Options',
+      cssClass: 'my-custom-class',
+      buttons: [{
+        text: 'Share',
+        icon: 'share',
+        handler: () => {
+          this.share();
+        }
+      }, {
+        text: 'Favorite',
+        icon: 'heart',
+        handler: () => {
+          this.favorite();
+        }
+      }, {
+        text: 'Cancel',
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+      }]
+    });
+    await actionSheet.present();
+  }
+
+  share() {
+    console.log('Share clicked');
+  }
+
+  favorite() {
+    console.log('Favorite clicked');
+  }
 
 }
